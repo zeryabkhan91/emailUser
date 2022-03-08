@@ -1,24 +1,29 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { from } from 'rxjs';
-import { User } from 'src/users/models/user.interface';
+import * as SendGrid from '@sendgrid/mail';
+import { ConfigService } from '@nestjs/config';
+import { Email } from 'src/emails/models/email.interface';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(private readonly configService: ConfigService) {
+    SendGrid.setApiKey(this.configService.get<string>('SEND_GRID_API'));
+  }
 
-  sendEmail(user: User) {
+  getEmail(data: Email) {
+    return {
+      to: data.email,
+      from: this.configService.get<string>('SEND_GRID_SENDER'),
+      subject: data.subject,
+      templateId: data.template,
+      dynamic_template_data: data
+    };
+  }
+
+  async sendEmail(data: Email): Promise<any> {
     try {
-      from(
-        this.mailerService.sendMail({
-          to: user.email,
-          subject: 'Welcome to nats micro-service',
-          template: 'accept',
-          context: {
-            name: user.name
-          }
-        })
-      );
+      const emailTemplate = this.getEmail(data);
+
+      return await SendGrid.send(emailTemplate);
     } catch (err) {
       console.log(`Error: ${err}`);
     }

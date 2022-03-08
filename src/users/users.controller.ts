@@ -12,7 +12,9 @@ export class UsersController {
 
   @EventPattern('create_user')
   async checkResponse(user: string) {
-    const createdUser = await this.userService.createUser(JSON.parse(user));
+    const createdUser: any = await this.userService.createUser(
+      JSON.parse(user)
+    );
     await this.mailService.sendEmail(createdUser);
   }
 }
