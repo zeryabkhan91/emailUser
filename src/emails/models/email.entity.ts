@@ -20,6 +20,6 @@ export class EmailEntity {
   @Column({ default: 0 })
   status: number;
 
-  @Column({ default: 0 })
+  @Column({ type: 'date', default: () => 'NOW()' })
   createDate: number;
 }

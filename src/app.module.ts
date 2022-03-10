@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
 import { EmailsModule } from './emails/emails.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -18,7 +19,6 @@ import { EmailsModule } from './emails/emails.module';
       autoLoadEntities: true,
       synchronize: true
     }),
-    MailModule,
     UsersModule,
     EmailsModule
   ],
