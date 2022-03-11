@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import EmailsEnums from '../enums/emails.enums';
 
 @Entity('emails')
 export class EmailEntity {
@@ -17,7 +18,7 @@ export class EmailEntity {
   @Column({ default: 0 })
   priority: number;
 
-  @Column({ default: 0 })
+  @Column({ default: EmailsEnums.STATUS.PENDING })
   status: number;
 
   @Column({ type: 'date', default: () => 'NOW()' })

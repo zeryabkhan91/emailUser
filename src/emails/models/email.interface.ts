@@ -5,5 +5,5 @@ export interface Email {
   template: string;
   priority: number;
   status: number;
-  createDate: number;
+  createDate?: number;
 }
